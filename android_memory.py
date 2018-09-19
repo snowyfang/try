@@ -9,9 +9,11 @@ import numpy
 import pylab
 
 adb_access="/*/platform-tools/adb"
+
+
+#get native|dalvik|total|etc. data
 native_cmd=adb_access+" shell dumpsys meminfo com.package.name | grep 'Native Heap'| head -n 1 | awk '{print $8 }' >> native.txt"
-dalvik_cmd=adb_access+" shell dumpsys meminfo com.package.name | grep 'Dalvik Heap'| head -n 1 | awk '{print $8 }' >> dalvik.txt"
-total_cmd=adb_access+" shell dumpsys meminfo com.package.name | grep 'TOTAL'| head -n 1 | awk '{print $7 }' >> total.txt"
+
 
 
 #devices id
@@ -24,15 +26,10 @@ def removeFile(path):
 		os.remove(path)
 	else:
 		return
-#write native memery data to file
+
+#a function that save data to file
 def native():
-	os.system(native_cmd)
-
-def dalvik():
-	os.system(dalvik_cmd)
-
-def total():
-	os.system(total_cmd)	
+	os.system(native_cmd)	
 
 
 #print device model
@@ -79,23 +76,16 @@ def drawLine(path):
 
 
 def run(): 
-	removeFile("dalvik.txt")
 	removeFile("native.txt")
-	removeFile("total.txt")
+
 	d1=datetime.datetime.now()
 	d2=d1+datetime.timedelta(seconds=30)
 	while datetime.datetime.now() < d2:
 		native()
-		dalvik()
-		total()
 		time.sleep(0.2)
 	devNamPrint()
-	myPrint("dalvik.txt")
-	myPrint("native.txt") 
-	myPrint("total.txt")
-	drawLine("dalvik.txt")
+	myPrint("native.txt")
 	drawLine("native.txt")
-	drawLine("total.txt")
   
 run()
 
